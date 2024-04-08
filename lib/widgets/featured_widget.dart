@@ -4,18 +4,61 @@ import 'package:google_fonts/google_fonts.dart';
 const white = Colors.white;
 const black = Colors.black;
 
-class FeatureWidget extends StatelessWidget {
-  const FeatureWidget({super.key});
+class FeatureWidget extends StatefulWidget {
+  FeatureWidget({super.key});
+
+  @override
+  State<FeatureWidget> createState() => _FeatureWidgetState();
+}
+
+class _FeatureWidgetState extends State<FeatureWidget> {
+  final ScrollController scrollController = ScrollController();
+
+  final List<Map<String, dynamic>> temp = [{}, {}, {}, {}, {}];
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.zero,
+    int length = (temp.length / 2).round();
+    return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      children: [
-        buildColumnListItems(1),
-        buildColumnListItems(2),
-      ],
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 1.3,
+        height: MediaQuery.of(context).size.height / 3,
+        child: Expanded(
+          child: ListView.builder(
+            padding: EdgeInsets.zero,
+            itemCount: length,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              if (index < temp.length) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    buildListItem(
+                      itemName: 'Cheese',
+                      itemColor: Colors.redAccent,
+                      itemPrice: 16,
+                      itemImgPath: 'assets/cheese.png',
+                    ),
+                    buildListItem(
+                      itemName: 'Hamburger',
+                      itemColor: Colors.lightBlueAccent,
+                      itemPrice: 21,
+                      itemImgPath: 'assets/burger.png',
+                    )
+                  ],
+                );
+              }
+            },
+          ),
+        ),
+      ),
     );
   }
 }
@@ -67,41 +110,5 @@ buildListItem({
         ),
       ],
     ),
-  );
-}
-
-buildColumnListItems(int number) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      if (number == 1)
-        buildListItem(
-          itemName: 'Hamburger',
-          itemColor: Colors.lightBlueAccent,
-          itemPrice: 21,
-          itemImgPath: 'assets/burger.png',
-        ),
-      if (number == 1)
-        buildListItem(
-          itemName: 'Cheese',
-          itemColor: Colors.redAccent,
-          itemPrice: 16,
-          itemImgPath: 'assets/cheese.png',
-        ),
-      if (number == 2)
-        buildListItem(
-          itemName: 'Fries',
-          itemColor: Colors.greenAccent,
-          itemPrice: 10,
-          itemImgPath: 'assets/fries.png',
-        ),
-      if (number == 2)
-        buildListItem(
-          itemName: 'Pizza',
-          itemColor: Colors.yellowAccent,
-          itemPrice: 21,
-          itemImgPath: 'assets/pizza.png',
-        )
-    ],
   );
 }
